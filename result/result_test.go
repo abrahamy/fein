@@ -3,47 +3,37 @@ package result
 import (
 	"errors"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestOk(t *testing.T) {
-	Ok[int, error](1)
+	ok := Ok[int, error](1)
+	assert.NotNil(t, ok)
 }
 
 func TestErr(t *testing.T) {
-	Err[int](errors.New("Error!!!"))
+	err := Err[int](errors.New("Error!!!"))
+	assert.NotNil(t, err)
 }
 
 func TestAnd(t *testing.T) {
 	ok := Ok[int, error](1)
 	alsoOk := Ok[int, error](2)
+
 	err := Err[int](errors.New("this is an error!"))
 	alsoErr := Err[int](errors.New("this is also an error!"))
 
-	if ok.And(alsoOk) != alsoOk {
-		t.Errorf("ok.Add(alsoOk) did not return alsoOk")
-	}
-
-	if ok.And(err) != err {
-		t.Errorf("ok.Add(err) did not return err")
-	}
-
-	if err.And(ok) != err {
-		t.Errorf("err.Add(ok) did not return err")
-	}
-
-	if err.And(alsoErr) != err {
-		t.Errorf("err.Add(alsoErr) did not return err")
-	}
+	assert.Equal(t, ok.And(alsoOk), alsoOk)
+	assert.Equal(t, ok.And(err), err)
+	assert.Equal(t, err.And(ok), err)
+	assert.Equal(t, err.And(alsoErr), err)
 }
 
 func TestIsErr(t *testing.T) {
 	ok := Ok[int, error](1)
-	if ok.IsErr() {
-		t.Errorf("Ok constructor yielded Err variant")
-	}
+	assert.False(t, ok.IsErr())
 
 	err := Err[any](errors.New("this is an error!"))
-	if !err.IsErr() {
-		t.Errorf("Err constructor yielded Ok variant")
-	}
+	assert.True(t, err.IsErr())
 }
