@@ -1,28 +1,29 @@
 package result
 
 import (
-	"errors"
+	"math"
+	"mayhap/predicate"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestOk(t *testing.T) {
-	ok := Ok[int, error](1)
+	ok := Ok[int, string](1)
 	assert.NotNil(t, ok)
 }
 
 func TestErr(t *testing.T) {
-	err := Err[int](errors.New("Error!!!"))
+	err := Err[int]("Error!!!")
 	assert.NotNil(t, err)
 }
 
 func TestAnd(t *testing.T) {
-	ok := Ok[int, error](1)
-	alsoOk := Ok[int, error](2)
+	ok := Ok[int, string](1)
+	alsoOk := Ok[int, string](2)
 
-	err := Err[int](errors.New("this is an error!"))
-	alsoErr := Err[int](errors.New("this is also an error!"))
+	err := Err[int]("this is an error!")
+	alsoErr := Err[int]("this is also an error!")
 
 	assert.Equal(t, ok.And(alsoOk), alsoOk)
 	assert.Equal(t, ok.And(err), err)
@@ -30,10 +31,25 @@ func TestAnd(t *testing.T) {
 	assert.Equal(t, err.And(alsoErr), err)
 }
 
+func TestAndThen(t *testing.T) {
+	ok := Ok[float64, string](7)
+	callable := predicate.New(func(i float64) any {
+		var val any = math.Pow(i, 2)
+		return val
+	})
+	var expected float64 = 49
+	actual := ok.AndThen(callable).Ok().Unwrap().(float64)
+	assert.Equal(t, actual, expected)
+
+	err := Err[float64]("this is an error!")
+	actualErr := err.AndThen(callable).Err().Unwrap()
+	assert.Equal(t, actualErr, "this is an error!")
+}
+
 func TestIsErr(t *testing.T) {
 	ok := Ok[int, error](1)
 	assert.False(t, ok.IsErr())
 
-	err := Err[any](errors.New("this is an error!"))
+	err := Err[any]("this is an error!")
 	assert.True(t, err.IsErr())
 }
