@@ -21,8 +21,7 @@ func Ok[T any, E any](value T) Result[T, E] {
 // Constructor for Err
 func Err[T any, E any](err E) Result[T, E] {
 	var rs Result[T, E]
-	rs.err = err
-	rs.isErr = true
+	rs.err, rs.isErr = err, true
 	return rs
 }
 
