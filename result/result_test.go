@@ -53,3 +53,57 @@ func TestIsErr(t *testing.T) {
 	err := Err[any]("this is an error!")
 	assert.True(t, err.IsErr())
 }
+
+func TestIsOkay(t *testing.T) {
+	ok := Ok[int, string](1)
+	assert.True(t, ok.IsOK())
+
+	err := Err[int]("this is an error!")
+	assert.False(t, err.IsOK())
+}
+
+func TestContains(t *testing.T) {
+	ok := Ok[int, string](1)
+	assert.True(t, ok.Contains(1))
+	assert.False(t, ok.Contains(2))
+
+	err := Err[int]("this is an error!")
+	assert.False(t, err.Contains(1))
+}
+
+func TestContainsErr(t *testing.T) {
+	ok := Ok[int, string](1)
+	assert.False(t, ok.ContainsErr("this is an error!"))
+
+	err := Err[int]("this is an error!")
+	assert.True(t, err.ContainsErr("this is an error!"))
+	assert.False(t, err.ContainsErr("A different error!"))
+}
+
+func TestExpect(t *testing.T) {
+	msg := "Got an error!"
+	ok := Ok[int, string](1)
+	assert.Equal(t, ok.Expect(msg), 1)
+
+	err := Err[int]("this is an error!")
+	defer func() {
+		if r := recover(); r != nil {
+			assert.Equal(t, msg, r)
+		}
+	}()
+	err.Expect(msg)
+}
+
+func TestExpectErr(t *testing.T) {
+	msg := "Did not get an error!"
+	err := Err[int]("this is an error!")
+	assert.Equal(t, err.ExpectErr(msg), "this is an error!")
+
+	ok := Ok[int, string](1)
+	defer func() {
+		if r := recover(); r != nil {
+			assert.Equal(t, msg, r)
+		}
+	}()
+	ok.ExpectErr(msg)
+}
