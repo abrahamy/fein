@@ -37,26 +37,26 @@ func (s Set[T]) Len() int {
 }
 
 // Returns a slice containing all members of the set.
-func (s Set[T]) Elems() []T {
-	elems := make([]T, 0)
+func (s Set[T]) Members() []T {
+	members := make([]T, 0)
 	for k := range s.inner {
-		elems = append(elems, k)
+		members = append(members, k)
 	}
-	return elems
+	return members
 }
 
 // Return a new set with elements from the set s and all others.
 func (s Set[T]) Union(other ...Set[T]) Set[T] {
 	u := New[T]()
-	u.Add(s.Elems()...)
+	u.Add(s.Members()...)
 	for _, o := range other {
-		u.Add(o.Elems()...)
+		u.Add(o.Members()...)
 	}
 	return u
 }
 
 func (s Set[T]) String() string {
-	return fmt.Sprintf("Set%v", s.Elems())
+	return fmt.Sprintf("Set%v", s.Members())
 }
 
 func (s Set[T]) Empty() bool {
@@ -75,31 +75,31 @@ func (s Set[T]) Contains(elem ...T) bool {
 
 // Return a new set with elements common to the set and other.
 func (s Set[T]) Intersection(other Set[T]) Set[T] {
-	elements := make([]T, 0)
-	for _, elem := range s.Elems() {
+	members := make([]T, 0)
+	for _, elem := range s.Members() {
 		if other.Contains(elem) {
-			elements = append(elements, elem)
+			members = append(members, elem)
 		}
 	}
-	return FromSlice(elements)
+	return FromSlice(members)
 }
 
 // Return a new set with elements in the set that are not in the others.
 func (s Set[T]) Difference(other Set[T]) Set[T] {
-	difference := make([]T, 0)
-	for _, elem := range s.Elems() {
+	members := make([]T, 0)
+	for _, elem := range s.Members() {
 		if !other.Contains(elem) {
-			difference = append(difference, elem)
+			members = append(members, elem)
 		}
 	}
-	return FromSlice(difference)
+	return FromSlice(members)
 }
 
 // Return a new set with elements in either the set or other but not both.
 func (s Set[T]) SymmetricDifference(other Set[T]) Set[T] {
-	difference := s.Difference(other).Elems()
-	difference = append(difference, other.Difference(s).Elems()...)
-	return FromSlice(difference)
+	members := s.Difference(other).Members()
+	members = append(members, other.Difference(s).Members()...)
+	return FromSlice(members)
 }
 
 // Return true if the set has no elements in common with other.
@@ -110,7 +110,7 @@ func (s Set[T]) Disjoint(other Set[T]) bool {
 
 // Returns true if every element in the set is also in other.
 func (s Set[T]) Subset(other Set[T]) bool {
-	return other.Contains(s.Elems()...)
+	return other.Contains(s.Members()...)
 }
 
 // Returns true if every element in the set is also in other and
@@ -121,7 +121,7 @@ func (s Set[T]) ProperSubset(other Set[T]) bool {
 
 // Returns true if every element in other is in the set.
 func (s Set[T]) Superset(other Set[T]) bool {
-	return s.Contains(other.Elems()...)
+	return s.Contains(other.Members()...)
 }
 
 // Return true if the set is a proper superset of other,
@@ -150,7 +150,7 @@ func (s Set[T]) Pop() T {
 	if s.Empty() {
 		panic("cannot pop item from an empty set!")
 	}
-	members := s.Elems()
+	members := s.Members()
 	val := members[len(members)-1]
 	delete(s.inner, val)
 	return val

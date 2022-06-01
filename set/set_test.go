@@ -17,7 +17,7 @@ func TestNew(t *testing.T) {
 func TestFromSlice(t *testing.T) {
 	s := FromSlice([]int{1, 2, 2, 3, 1, 1})
 	assert.Equal(t, s.Len(), 3)
-	assert.ElementsMatch(t, s.Elems(), []int{1, 2, 3})
+	assert.ElementsMatch(t, s.Members(), []int{1, 2, 3})
 }
 
 func TestLen(t *testing.T) {
@@ -38,15 +38,15 @@ func TestAdd(t *testing.T) {
 	s.Add(4, 5)
 	assert.Equal(t, s.Len(), 5)
 
-	assert.ElementsMatch(t, s.Elems(), []int{1, 2, 3, 4, 5})
+	assert.ElementsMatch(t, s.Members(), []int{1, 2, 3, 4, 5})
 }
 
-func TestElems(t *testing.T) {
+func TestMembers(t *testing.T) {
 	emptySet := New[int]()
 	intSet := FromSlice([]int{1, 2, 2, 3, 4, 4, 3})
-	assert.Equal(t, len(emptySet.Elems()), 0)
-	assert.Equal(t, len(intSet.Elems()), 4)
-	assert.ElementsMatch(t, intSet.Elems(), []int{1, 2, 3, 4})
+	assert.Equal(t, len(emptySet.Members()), 0)
+	assert.Equal(t, len(intSet.Members()), 4)
+	assert.ElementsMatch(t, intSet.Members(), []int{1, 2, 3, 4})
 }
 
 func TestUnion(t *testing.T) {
@@ -55,16 +55,16 @@ func TestUnion(t *testing.T) {
 	fourFive := FromSlice([]int{4, 5})
 	sixSevenEight := FromSlice([]int{6, 7, 8})
 
-	assert.ElementsMatch(t, emptySet.Union(oneTwoThree).Elems(), oneTwoThree.Elems())
-	assert.ElementsMatch(t, oneTwoThree.Union(fourFive).Elems(), []int{1, 2, 3, 4, 5})
-	assert.ElementsMatch(t, oneTwoThree.Union(fourFive, sixSevenEight).Elems(), []int{1, 2, 3, 4, 5, 6, 7, 8})
+	assert.ElementsMatch(t, emptySet.Union(oneTwoThree).Members(), oneTwoThree.Members())
+	assert.ElementsMatch(t, oneTwoThree.Union(fourFive).Members(), []int{1, 2, 3, 4, 5})
+	assert.ElementsMatch(t, oneTwoThree.Union(fourFive, sixSevenEight).Members(), []int{1, 2, 3, 4, 5, 6, 7, 8})
 }
 
 func TestString(t *testing.T) {
 	emptySet := New[int]()
 	noneEmpty := FromSlice([]int{1, 2, 3})
-	assert.Equal(t, strings.Compare(emptySet.String(), fmt.Sprintf("Set%v", emptySet.Elems())), 0)
-	assert.Equal(t, strings.Compare(noneEmpty.String(), fmt.Sprintf("Set%v", noneEmpty.Elems())), 0)
+	assert.Equal(t, strings.Compare(emptySet.String(), fmt.Sprintf("Set%v", emptySet.Members())), 0)
+	assert.Equal(t, strings.Compare(noneEmpty.String(), fmt.Sprintf("Set%v", noneEmpty.Members())), 0)
 }
 
 func TestContains(t *testing.T) {
