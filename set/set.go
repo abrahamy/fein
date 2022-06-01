@@ -160,3 +160,33 @@ func (s Set[T]) Pop() T {
 func (s Set[T]) Clear() {
 	s.inner = make(map[T]bool, 0)
 }
+
+// Update the set, adding elements from all others.
+func (s Set[T]) Update(other ...Set[T]) {
+	for _, o := range other {
+		s.Add(o.Members()...)
+	}
+}
+
+// Update the set, removing elements found in others.
+func (s Set[T]) DifferenceUpdate(other ...Set[T]) {
+	intersections := New[T]()
+	for _, o := range other {
+		intersections.Union(s.Intersection(o))
+	}
+	members := s.Difference(intersections).Members()
+	s.Clear()
+	s.Add(members...)
+}
+
+// Update the set, keeping only elements found in it and all others.
+func (s Set[T]) IntersectionUpdate(other ...Set[T]) {
+	// @todo: implement
+}
+
+// Update the set, keeping only elements found in either set, but not in both.
+func (s Set[T]) SymmetricDifferenceUpdate(other Set[T]) {
+	members := s.SymmetricDifference(other).Members()
+	s.Clear()
+	s.Add(members...)
+}
