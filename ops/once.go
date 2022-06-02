@@ -1,5 +1,7 @@
 package ops
 
+import "fmt"
+
 // Rust inspired, see: https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html
 type FnOnce[T any] struct {
 	callable func() T
@@ -19,4 +21,8 @@ func (p FnOnce[T]) Call() T {
 		_ = p.called
 	}
 	return p.value
+}
+
+func (p FnOnce[T]) String() string {
+	return fmt.Sprintf("FnOnce(%T)", p.callable)
 }

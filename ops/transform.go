@@ -1,5 +1,7 @@
 package ops
 
+import "fmt"
+
 // Rust inspired, see: https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html
 type Transform[U any, V any] struct {
 	callable func(U) V
@@ -13,4 +15,8 @@ func NewTransform[U any, V any](f func(U) V) Transform[U, V] {
 
 func (p Transform[U, V]) Call(arg U) V {
 	return p.callable(arg)
+}
+
+func (p Transform[U, V]) String() string {
+	return fmt.Sprintf("Transform(%T)", p.callable)
 }

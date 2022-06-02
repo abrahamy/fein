@@ -1,6 +1,7 @@
 package result
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/abrahamy/fein/ops"
@@ -89,12 +90,12 @@ func (rs Result[T, E]) IsErr() bool {
 	return rs.isErr
 }
 
-func (rs Result[T, E]) IsOK() bool {
+func (rs Result[T, E]) IsOk() bool {
 	return !rs.IsErr()
 }
 
 func (rs Result[T, E]) Contains(value T) bool {
-	return rs.IsOK() && reflect.DeepEqual(rs.value, value)
+	return rs.IsOk() && reflect.DeepEqual(rs.value, value)
 }
 
 func (rs Result[T, E]) ContainsErr(err E) bool {
@@ -102,7 +103,7 @@ func (rs Result[T, E]) ContainsErr(err E) bool {
 }
 
 func (rs Result[T, E]) Expect(msg string) T {
-	if rs.IsOK() {
+	if rs.IsOk() {
 		return rs.Ok().Unwrap()
 	}
 
@@ -119,4 +120,11 @@ func (rs Result[T, E]) ExpectErr(msg string) E {
 
 func (rs Result[T, E]) Map(f ops.Transform[T, any]) Result[any, E] {
 	return rs.AndThen(f)
+}
+
+func (rs Result[T, E]) String() string {
+	if rs.IsOk() {
+		return fmt.Sprintf("Ok(%v)", rs.Ok().Unwrap())
+	}
+	return fmt.Sprintf("Err(%v)", rs.Err().Unwrap())
 }

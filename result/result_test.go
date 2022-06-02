@@ -57,10 +57,10 @@ func TestIsErr(t *testing.T) {
 
 func TestIsOkay(t *testing.T) {
 	ok := Ok[int, string](1)
-	assert.True(t, ok.IsOK())
+	assert.True(t, ok.IsOk())
 
 	err := Err[int]("this is an error!")
-	assert.False(t, err.IsOK())
+	assert.False(t, err.IsOk())
 }
 
 func TestContains(t *testing.T) {
