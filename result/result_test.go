@@ -1,8 +1,8 @@
 package result
 
 import (
+	"fein/predicate"
 	"math"
-	"mayhap/predicate"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

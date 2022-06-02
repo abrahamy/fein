@@ -1,7 +1,7 @@
 package option
 
 import (
-	"mayhap/predicate"
+	"fein/predicate"
 )
 
 type Option[T any] struct {

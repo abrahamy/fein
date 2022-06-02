@@ -1,4 +1,4 @@
-module mayhap
+module fein
 
 go 1.18
 

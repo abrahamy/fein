@@ -1,8 +1,8 @@
 package result
 
 import (
-	"mayhap/option"
-	"mayhap/predicate"
+	"fein/option"
+	"fein/predicate"
 	"reflect"
 )
 
