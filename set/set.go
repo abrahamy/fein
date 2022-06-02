@@ -160,6 +160,7 @@ func (s Set[T]) Pop() T {
 // Remove all elements from the set.
 func (s Set[T]) Clear() {
 	s.inner = make(map[T]bool, 0)
+	_ = s.inner
 }
 
 // Update the set, adding elements from all others.

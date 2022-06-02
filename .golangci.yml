@@ -1,0 +1,5 @@
+# for available options see https://golangci-lint.run/usage/configuration/
+linters:
+  enable:
+    - goimports
+  fast: true
