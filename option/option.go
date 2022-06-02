@@ -1,6 +1,8 @@
 package option
 
 import (
+	"fmt"
+
 	"github.com/abrahamy/fein/ops"
 )
 
@@ -49,4 +51,11 @@ func (o Option[T]) UnwrapOrElse(f ops.FnOnce[T]) T {
 		return o.value
 	}
 	return f.Call()
+}
+
+func (o Option[T]) String() string {
+	if o.IsSome() {
+		return fmt.Sprintf("Some(%v)", o.value)
+	}
+	return "None"
 }
