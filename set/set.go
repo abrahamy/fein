@@ -23,7 +23,7 @@ func FromSlice[T comparable](elem []T) Set[T] {
 }
 
 // Add element(s) to the set and return the number of new items.
-func (s Set[T]) Add(elem ...T) int {
+func (s *Set[T]) Add(elem ...T) int {
 	previousSize := len(s.inner)
 	for _, e := range elem {
 		s.inner[e] = true
@@ -132,7 +132,7 @@ func (s Set[T]) ProperSuperset(other Set[T]) bool {
 }
 
 // Remove element elem from the set. Panics if elem is not contained in the set.
-func (s Set[T]) Remove(elem T) {
+func (s *Set[T]) Remove(elem T) {
 	if !s.Contains(elem) {
 		panic(fmt.Sprintf("set %s does not contain the element %v.", s.String(), elem))
 	}
@@ -140,14 +140,14 @@ func (s Set[T]) Remove(elem T) {
 }
 
 // Remove element elem from the set if it is present. Never panics.
-func (s Set[T]) Discard(elem ...T) {
+func (s *Set[T]) Discard(elem ...T) {
 	for _, e := range elem {
 		delete(s.inner, e)
 	}
 }
 
 // Remove and return an arbitrary element from the set. Panics if the set is empty.
-func (s Set[T]) Pop() T {
+func (s *Set[T]) Pop() T {
 	if s.Empty() {
 		panic("cannot pop item from an empty set!")
 	}
@@ -158,20 +158,19 @@ func (s Set[T]) Pop() T {
 }
 
 // Remove all elements from the set.
-func (s Set[T]) Clear() {
+func (s *Set[T]) Clear() {
 	s.inner = make(map[T]bool, 0)
-	_ = s.inner
 }
 
 // Update the set, adding elements from all others.
-func (s Set[T]) Update(other ...Set[T]) {
+func (s *Set[T]) Update(other ...Set[T]) {
 	for _, o := range other {
 		s.Add(o.Members()...)
 	}
 }
 
 // Update the set, removing elements found in others.
-func (s Set[T]) DifferenceUpdate(other ...Set[T]) {
+func (s *Set[T]) DifferenceUpdate(other ...Set[T]) {
 	intersections := New[T]()
 	for _, o := range other {
 		intersections.Union(s.Intersection(o))
@@ -182,12 +181,13 @@ func (s Set[T]) DifferenceUpdate(other ...Set[T]) {
 }
 
 // Update the set, keeping only elements found in it and all others.
-func (s Set[T]) IntersectionUpdate(other ...Set[T]) {
+func (s *Set[T]) IntersectionUpdate(other ...Set[T]) {
 	// @todo: implement
+	panic("Not implemented!")
 }
 
 // Update the set, keeping only elements found in either set, but not in both.
-func (s Set[T]) SymmetricDifferenceUpdate(other Set[T]) {
+func (s *Set[T]) SymmetricDifferenceUpdate(other Set[T]) {
 	members := s.SymmetricDifference(other).Members()
 	s.Clear()
 	s.Add(members...)

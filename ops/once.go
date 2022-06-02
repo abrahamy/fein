@@ -15,10 +15,9 @@ func NewFnOnce[T any](f func() T) FnOnce[T] {
 	return p
 }
 
-func (p FnOnce[T]) Call() T {
+func (p *FnOnce[T]) Call() T {
 	if !p.called {
 		p.value, p.called = p.callable(), true
-		_ = p.called
 	}
 	return p.value
 }
