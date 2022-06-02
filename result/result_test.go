@@ -1,7 +1,7 @@
 package result
 
 import (
-	"fein/predicate"
+	"fein/ops"
 	"math"
 	"testing"
 
@@ -33,7 +33,7 @@ func TestAnd(t *testing.T) {
 
 func TestAndThen(t *testing.T) {
 	ok := Ok[float64, string](7)
-	callable := predicate.New(func(i float64) any {
+	callable := ops.NewTransform(func(i float64) any {
 		var val any = math.Pow(i, 2)
 		return val
 	})

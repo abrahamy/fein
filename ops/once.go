@@ -1,5 +1,6 @@
-package predicate
+package ops
 
+// Rust inspired, see: https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html
 type FnOnce[T any] struct {
 	callable func() T
 	called   bool

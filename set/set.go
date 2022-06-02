@@ -2,6 +2,7 @@ package set
 
 import "fmt"
 
+// Python inspired Set data structure, see: https://docs.python.org/3/library/stdtypes.html#set
 type Set[T comparable] struct {
 	inner map[T]bool
 }

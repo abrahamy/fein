@@ -1,9 +1,10 @@
 package option
 
 import (
-	"fein/predicate"
+	"fein/ops"
 )
 
+// Rust inspired, see: https://doc.rust-lang.org/nightly/core/option/enum.Option.html
 type Option[T any] struct {
 	value T
 	some  bool
@@ -43,7 +44,7 @@ func (o Option[T]) UnwrapOr(defaultValue T) T {
 	return defaultValue
 }
 
-func (o Option[T]) UnwrapOrElse(f predicate.FnOnce[T]) T {
+func (o Option[T]) UnwrapOrElse(f ops.FnOnce[T]) T {
 	if o.IsSome() {
 		return o.value
 	}

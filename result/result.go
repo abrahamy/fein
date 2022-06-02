@@ -1,11 +1,12 @@
 package result
 
 import (
+	"fein/ops"
 	"fein/option"
-	"fein/predicate"
 	"reflect"
 )
 
+// Rust inspired, see: https://doc.rust-lang.org/nightly/core/result/enum.Result.html
 type Result[T any, E any] struct {
 	value T
 	err   E
@@ -76,7 +77,7 @@ func (rs Result[T, E]) And(other Result[T, E]) Result[T, E] {
  This method has the same limitations as Result::And, the actual types of the
  Rust version is func (rs Result[T, E]) AndThen(f Predicate[T, U]) Result[U, E]
 */
-func (rs Result[T, E]) AndThen(f predicate.Predicate[T, any]) Result[any, E] {
+func (rs Result[T, E]) AndThen(f ops.Transform[T, any]) Result[any, E] {
 	if rs.IsErr() {
 		return Err[any](rs.err)
 	}
@@ -115,6 +116,6 @@ func (rs Result[T, E]) ExpectErr(msg string) E {
 	panic(msg)
 }
 
-func (rs Result[T, E]) Map(f predicate.Predicate[T, any]) Result[any, E] {
+func (rs Result[T, E]) Map(f ops.Transform[T, any]) Result[any, E] {
 	return rs.AndThen(f)
 }
