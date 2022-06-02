@@ -1,9 +1,10 @@
 package result
 
 import (
-	"fein/ops"
-	"fein/option"
 	"reflect"
+
+	"github.com/abrahamy/fein/ops"
+	"github.com/abrahamy/fein/option"
 )
 
 // Rust inspired, see: https://doc.rust-lang.org/nightly/core/result/enum.Result.html

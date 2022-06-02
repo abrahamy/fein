@@ -1,4 +1,4 @@
-module fein
+module github.com/abrahamy/fein
 
 go 1.18
 

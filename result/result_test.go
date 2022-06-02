@@ -1,9 +1,10 @@
 package result
 
 import (
-	"fein/ops"
 	"math"
 	"testing"
+
+	"github.com/abrahamy/fein/ops"
 
 	"github.com/stretchr/testify/assert"
 )

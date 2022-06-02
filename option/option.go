@@ -1,7 +1,7 @@
 package option
 
 import (
-	"fein/ops"
+	"github.com/abrahamy/fein/ops"
 )
 
 // Rust inspired, see: https://doc.rust-lang.org/nightly/core/option/enum.Option.html
