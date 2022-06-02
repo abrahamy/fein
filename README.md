@@ -1,4 +1,4 @@
-# github.com/abrahamy/fein
+# fein
 An attempt at implementing some missing data structures in Go using generics.
 
 The following Rust inspired types are implement:
