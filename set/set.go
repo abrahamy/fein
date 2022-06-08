@@ -4,13 +4,13 @@ import "fmt"
 
 // Python inspired Set data structure, see: https://docs.python.org/3/library/stdtypes.html#set
 type Set[T comparable] struct {
-	inner map[T]bool
+	inner map[T]struct{}
 }
 
 // Constructor: make a new empty set.
 func New[T comparable]() Set[T] {
 	s := Set[T]{
-		make(map[T]bool, 0),
+		make(map[T]struct{}, 0),
 	}
 	return s
 }
@@ -26,7 +26,7 @@ func FromSlice[T comparable](elem []T) Set[T] {
 func (s *Set[T]) Add(elem ...T) int {
 	previousSize := len(s.inner)
 	for _, e := range elem {
-		s.inner[e] = true
+		s.inner[e] = struct{}{}
 	}
 
 	return len(s.inner) - previousSize
@@ -66,12 +66,16 @@ func (s Set[T]) Empty() bool {
 
 // Returns true if elements are members of the set.
 func (s Set[T]) Contains(elem ...T) bool {
-	for _, e := range elem {
-		if _, ok := s.inner[e]; !ok {
-			return false
+	if len(elem) > 0 {
+		for _, e := range elem {
+			if _, ok := s.inner[e]; !ok {
+				return false
+			}
 		}
+
+		return true
 	}
-	return true
+	return false
 }
 
 // Return a new set with elements common to the set and other.
@@ -159,7 +163,7 @@ func (s *Set[T]) Pop() T {
 
 // Remove all elements from the set.
 func (s *Set[T]) Clear() {
-	s.inner = make(map[T]bool, 0)
+	s.inner = make(map[T]struct{}, 0)
 }
 
 // Update the set, adding elements from all others.

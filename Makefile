@@ -2,6 +2,7 @@
 
 lint:
 	go mod tidy
+	shadow -strict ./...
 	golangci-lint run ./...
 .PHONY:lint
 
