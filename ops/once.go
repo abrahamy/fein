@@ -3,25 +3,25 @@ package ops
 import "fmt"
 
 // Rust inspired, see: https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html
-type FnOnce[T any] struct {
-	callable func() T
-	called   bool
-	value    T
+type fnOnce[T any] struct {
+	call   func() T
+	result T
 }
 
-func NewFnOnce[T any](f func() T) FnOnce[T] {
-	var p FnOnce[T]
-	p.callable = f
-	return p
+func FnOnce[T any](f func() T) fnOnce[T] {
+	var fn fnOnce[T]
+	fn.call = f
+	return fn
 }
 
-func (p *FnOnce[T]) Call() T {
-	if !p.called {
-		p.value, p.called = p.callable(), true
+func (f *fnOnce[T]) Call() T {
+	if f.call != nil {
+		f.result = f.call()
+		f.call = nil
 	}
-	return p.value
+	return f.result
 }
 
-func (p FnOnce[T]) String() string {
-	return fmt.Sprintf("FnOnce(%T)", p.callable)
+func (f fnOnce[T]) String() string {
+	return fmt.Sprintf("FnOnce(%T)", f.call)
 }

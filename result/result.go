@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/abrahamy/fein/ops"
 	"github.com/abrahamy/fein/option"
 )
 
@@ -79,11 +78,11 @@ func (rs Result[T, E]) And(other Result[T, E]) Result[T, E] {
  This method has the same limitations as Result::And, the actual types of the
  Rust version is func (rs Result[T, E]) AndThen(f Predicate[T, U]) Result[U, E]
 */
-func (rs Result[T, E]) AndThen(f ops.Transform[T, any]) Result[any, E] {
+func (rs Result[T, E]) AndThen(f func(T) any) Result[any, E] {
 	if rs.IsErr() {
 		return Err[any](rs.err)
 	}
-	return Ok[any, E](f.Call(rs.value))
+	return Ok[any, E](f(rs.value))
 }
 
 func (rs Result[T, E]) IsErr() bool {
@@ -118,7 +117,7 @@ func (rs Result[T, E]) ExpectErr(msg string) E {
 	panic(msg)
 }
 
-func (rs Result[T, E]) Map(f ops.Transform[T, any]) Result[any, E] {
+func (rs Result[T, E]) Map(f func(T) any) Result[any, E] {
 	return rs.AndThen(f)
 }
 
