@@ -4,24 +4,30 @@ import "fmt"
 
 // Rust inspired, see: https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html
 type fnOnce[T any] struct {
-	call   func() T
-	result T
+	f func() T
 }
 
 func FnOnce[T any](f func() T) fnOnce[T] {
-	var fn fnOnce[T]
-	fn.call = f
-	return fn
+	var instance fnOnce[T]
+	instance.f = f
+	return instance
 }
 
-func (f *fnOnce[T]) Call() T {
-	if f.call != nil {
-		f.result = f.call()
-		f.call = nil
+func (self *fnOnce[T]) Call() T {
+ if self.f == nil {
+  panic("Function of type FnOnce called more than once!")
 	}
-	return f.result
+	
+ result := self.f()
+	self.f = nil
+	return result
 }
 
-func (f fnOnce[T]) String() string {
-	return fmt.Sprintf("FnOnce(%T)", f.call)
+// This is an alias for FnOnce::Call method 
+func (self *fnOnce[T]) Apply() T {
+ return self.Call()
+}
+
+func (self fnOnce[T]) String() string {
+	return fmt.Sprintf("FnOnce(%T)", self.f)
 }
