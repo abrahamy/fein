@@ -140,7 +140,7 @@ func (s *Set[T]) Remove(elem T) {
 	if !s.Contains(elem) {
 		panic(fmt.Sprintf("set %s does not contain the element %v.", s.String(), elem))
 	}
-	delete(s.inner, elem)
+	s.Discard(elem)
 }
 
 // Remove element elem from the set if it is present. Never panics.
@@ -155,10 +155,9 @@ func (s *Set[T]) Pop() T {
 	if s.Empty() {
 		panic("cannot pop item from an empty set!")
 	}
-	members := s.Members()
-	val := members[len(members)-1]
-	delete(s.inner, val)
-	return val
+	e := s.Members()[s.Len() - 1]
+	s.Discard(e)
+	return e
 }
 
 // Remove all elements from the set.
